@@ -7,7 +7,7 @@ Route::get('/', function () {
     $categories = DB::select('select * from ForumCategories');
 
     foreach ($categories as $category) {
-        echo $category->name."<br/>";
+        echo $category->name."2<br/>";
         echo $category->description."<br/>";
     }
 
