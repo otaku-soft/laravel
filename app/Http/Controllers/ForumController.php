@@ -117,7 +117,7 @@ class ForumController extends Controller
     public function topicList(int $category_id ) : View
     {
         $category = forums_categories::find($category_id);
-        $topics = $category->topics()->paginate(10);
+        $topics = $category->topics()->latest()->paginate(10);
         return view('forum.topicList',["category" => $category,'topics' => $topics]);
     }
     public function addTopic(int $categoryId, Request $request) : View
