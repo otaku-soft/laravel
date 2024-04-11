@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\forums_sections;
 use App\Models\forums_categories;
 use App\Models\forums_topics;
+use App\Models\forums_posts;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 
 class ForumController extends Controller
 {
@@ -21,9 +24,11 @@ class ForumController extends Controller
         $truncate_sections = new forums_sections();
         $truncate_categories = new forums_categories();
         $truncate_topics = new forums_topics();
+        $truncate_posts = new forums_posts();
         $truncate_sections::query()->truncate();
         $truncate_categories::query()->truncate();
         $truncate_topics::query()->truncate();
+        $truncate_posts::query()->truncate();
         $sections =
         [
             [
@@ -40,10 +45,12 @@ class ForumController extends Controller
                         [
                             [
                                 "subject" => "Persona 5",
+                                "message" => "Best jrpg ever",
                                 "user_id" => 1,
                             ],
                             [
                                 "subject" => "Dragon quest  11",
+                                "message" => "it is kinda overrated honestly",
                                 "user_id" => 1
                             ],
                         ]
@@ -97,6 +104,11 @@ class ForumController extends Controller
                         $entity_topic->user_id = $topic['user_id'];
                         $entity_topic->subject = $topic['subject'];
                         $entity_topic->save();
+                        $entity_post = new forums_posts();
+                        $entity_post->message = $topic['message'];
+                        $entity_post->user_id = $entity_topic->user_id;
+                        $entity_post->topic_id = $entity_topic->id;
+                        $entity_post->save();
                     }
             }
         }
@@ -107,5 +119,32 @@ class ForumController extends Controller
         $category = forums_categories::find($category_id);
         $topics = $category->topics()->paginate(10);
         return view('forum.topicList',["category" => $category,'topics' => $topics]);
+    }
+    public function addTopic(int $categoryId, Request $request) : View
+    {
+        $category = forums_categories::find($categoryId);
+        $request->session()->put("addTopicCategoryId",$categoryId);
+        return view('forum.addTopic',["category" => $category]);
+    }
+    public function addTopicSaved(Request $request,Auth $auth) : JsonResponse
+    {
+        try
+        {
+            $entity_topic = new forums_topics();
+            $entity_topic->category_id = $request->session()->get("addTopicCategoryId");
+            $entity_topic->user_id = $auth::id();
+            $entity_topic->subject = $request->get("subject");
+            $entity_topic->save();
+            $entity_post = new forums_posts();
+            $entity_post->user_id = $auth::id();
+            $entity_post->topic_id = $entity_topic->id;
+            $entity_post->message = $request->get("message");
+            $entity_post->save();
+        }
+        catch (\Exception $e)
+        {
+            return new Response(["success" => false,500]);
+        }
+        return new JsonResponse(["success" => true]);
     }
 }

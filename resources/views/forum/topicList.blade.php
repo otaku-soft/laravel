@@ -21,7 +21,7 @@
             @endforelse
             @auth
             <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-              Add Topic
+              <a href = "{{ route('forum_addTopic',['categoryId' => $category->id]) }}">Add Topic</a>
             </button>
             @endauth
         </span>
