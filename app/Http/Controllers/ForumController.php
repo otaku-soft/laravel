@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\forums_sections;
 use App\Models\forums_categories;
+use App\Models\forums_topics;
 use Illuminate\View\View;
 
 class ForumController extends Controller
@@ -13,21 +14,16 @@ class ForumController extends Controller
     public function index(): View
     {
         $sections = forums_sections::all();
-        foreach ($sections as $section)
-        {
-            foreach ($section->categories()->orderBy("order")->get() as $category)
-            {
-                //echo $category->name."<br/>";
-            }
-        }
         return view('forum.index',["sections" => $sections]);
     }
     public function createForumSections(): Response
     {
         $truncate_sections = new forums_sections();
         $truncate_categories = new forums_categories();
+        $truncate_topics = new forums_topics();
         $truncate_sections::query()->truncate();
         $truncate_categories::query()->truncate();
+        $truncate_topics::query()->truncate();
         $sections =
         [
             [
@@ -39,7 +35,18 @@ class ForumController extends Controller
                     [
                         "name" => "General",
                         "description" => "Talk about any type of game here",
-                        "order" => 1
+                        "order" => 1,
+                        "topics" =>
+                        [
+                            [
+                                "subject" => "Persona 5",
+                                "user_id" => 1,
+                            ],
+                            [
+                                "subject" => "Dragon quest  11",
+                                "user_id" => 1
+                            ],
+                        ]
                     ],
                     [
                         "name" => "Jrpg",
@@ -82,8 +89,23 @@ class ForumController extends Controller
                 $entity_category->description = $category['description'];
                 $entity_category->order = $category['order'];
                 $entity_category->save();
+                if (isset($category['topics']))
+                    foreach ($category['topics'] as $topic)
+                    {
+                        $entity_topic = new forums_topics();
+                        $entity_topic->category_id = $entity_category->id;
+                        $entity_topic->user_id = $topic['user_id'];
+                        $entity_topic->subject = $topic['subject'];
+                        $entity_topic->save();
+                    }
             }
         }
         return new Response("data installed");
+    }
+    public function topicList(int $category_id ) : View
+    {
+        $category = forums_categories::find($category_id);
+        $topics = $category->topics()->paginate(10);
+        return view('forum.topicList',["category" => $category,'topics' => $topics]);
     }
 }
