@@ -16,6 +16,6 @@ class forums_topics extends Model
     }
     public function posts(): HasMany
     {
-        return $this->hasOne(forums_post::class,"topic_id");
+        return $this->hasMany(forums_posts::class,"topic_id");
     }
 }

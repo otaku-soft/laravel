@@ -126,17 +126,17 @@ class ForumController extends Controller
         $request->session()->put("addTopicCategoryId",$categoryId);
         return view('forum.addTopic',["category" => $category]);
     }
-    public function addTopicSaved(Request $request,Auth $auth) : JsonResponse
+    public function addTopicSaved(Request $request) : JsonResponse
     {
         try
         {
             $entity_topic = new forums_topics();
             $entity_topic->category_id = $request->session()->get("addTopicCategoryId");
-            $entity_topic->user_id = $auth::id();
+            $entity_topic->user_id = Auth::id();
             $entity_topic->subject = $request->get("subject");
             $entity_topic->save();
             $entity_post = new forums_posts();
-            $entity_post->user_id = $auth::id();
+            $entity_post->user_id = Auth::id();
             $entity_post->topic_id = $entity_topic->id;
             $entity_post->message = $request->get("message");
             $entity_post->save();
@@ -146,5 +146,30 @@ class ForumController extends Controller
             return new Response(["success" => false,500]);
         }
         return new JsonResponse(["success" => true]);
+    }
+    public function viewTopic($topic_id,Request $request) : view
+    {
+        $topic = forums_topics::find($topic_id);
+        $posts = $topic->posts()->paginate(10);
+        $request->session()->put("addTopicId",$topic->id);
+        return view("forum.viewTopic",["topic" => $topic,"posts" => $posts]);
+    }
+    public function addPost(Request $request) : JsonResponse
+    {
+        try{
+            $entity_post = new forums_posts();
+            $entity_post->user_id = Auth::id();
+            $entity_post->topic_id = $request->session()->get("addTopicId");
+            $entity_post->message = $request->get("message");
+            $entity_post->save();
+            $topic = forums_topics::find($entity_post->topic_id);
+
+        }
+        catch (\Exception $e)
+        {
+            return new Response(["success" => false,500]);
+        }
+        //($topic->posts()->
+        return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
     }
 }
