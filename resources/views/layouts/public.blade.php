@@ -173,7 +173,7 @@
         </div>
     </main>
 
-    <footer class="mt-auto text-white-50">
+    <footer class="mt-auto text-white-50" style="margin-top:20px !important;padding-bottom:20px !important">
         {{ env('APP_NAME') }}
     </footer>
 </div>
