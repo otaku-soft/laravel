@@ -9,8 +9,13 @@
                 </tr>
             @foreach ($posts as $post)
                 <tr>
-                    <td>{{ $post->user->name }}</td>
+                    @if ($posts->currentPage() === $posts->lastPage() && $loop->last && $post->user->id === Auth::user()->id)
+                    <td><a href = "javascript:editLastMessageModal()">{{ $post->user->name }}</a></td>
+                    <td><a href = "javascript:editLastMessageModal()">{{ $post->message }}</a></td>
+                    @else
+                    <td>{{ $post->user->name }} </td>
                     <td>{{ $post->message }}</td>
+                    @endif
                 </tr>
             @endforeach
             </table>
@@ -21,11 +26,17 @@
                 <textarea name="message" rows="4" class="form-control" placeholder="Write your thoughts here..." required></textarea>
                 <br/>
                 <button class="btn btn-primary" type ="submit">
-                  Add Reply
+                    Add Reply
                 </button>
             </form>
         @endauth
         {{ $posts->links() }}
+        <div style="display:none" id ="editMessage">
+            <form id="editMessageForm" method="post">
+                <textarea name="message" id ="editMessageTextArea" rows="4" class="form-control" placeholder="Write your thoughts here..." required>{{ $post->message }}</textarea>
+                <button type="submit" id="editMessageFormButton" style="display:none"></button>
+            </form>
+        </div>
     <script>
         $( "#addPostForm" ).on( "submit", function( event ) {
             event.preventDefault();
@@ -34,6 +45,41 @@
                     window.location = data.url;
                 });
         });
+    </script>
+    <script>
+        function editLastMessageModal()
+        {
+            bootbox.confirm({
+                title: 'Edit Message',
+                message: $("#editMessage").html(),
+                size: 'large',
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Cancel'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Save'
+                    }
+                },
+                callback: function (result) {
+                    $(".bootbox-body").find("#editMessageForm").on( "submit", function( event ) {
+                        event.preventDefault();
+                    });
+                    if (result) {
+                        let message = $(".bootbox-body").find("#editMessageTextArea").val();
+                        $(".bootbox-body").find("#editMessageFormButton").click();
+                        if (message) {
+                            $.post("{{ route('forum_editMessage') }}", {message: message})
+                                .done(function (data) {
+                                    window.location = "";
+                                });
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            });
+        }
     </script>
 @endsection
 

@@ -143,7 +143,7 @@ class ForumController extends Controller
         }
         catch (\Exception $e)
         {
-            return new Response(["success" => false,500]);
+            return new Response(["success" => false],500);
         }
         return new JsonResponse(["success" => true]);
     }
@@ -156,7 +156,8 @@ class ForumController extends Controller
     }
     public function addPost(Request $request) : JsonResponse
     {
-        try{
+        try
+        {
             $entity_post = new forums_posts();
             $entity_post->user_id = Auth::id();
             $entity_post->topic_id = $request->session()->get("addTopicId");
@@ -167,9 +168,29 @@ class ForumController extends Controller
         }
         catch (\Exception $e)
         {
-            return new Response(["success" => false,500]);
+            return new Response(["success" => false],500);
         }
         //($topic->posts()->
         return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
+    }
+    public function editMessage(Request $request) : JsonResponse
+    {
+        try
+        {
+            $topic = forums_topics::find($request->session()->get("addTopicId"));
+            $lastPost = $topic->posts()->orderBy("id","desc")->first();
+
+            if ($lastPost->user->id !== Auth::id())
+            {
+                return new JsonResponse(["success" => false, 401]);
+            }
+            $lastPost->message = $request->get("message");
+            $lastPost->save();
+        }
+        catch (\Exception $e)
+        {
+            return new JsonResponse(["success" => false],500);
+        }
+        return new JsonResponse(["success" => true]);
     }
 }

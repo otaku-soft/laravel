@@ -14,5 +14,5 @@ Route::middleware('auth')->group(function () {
     Route::get($url->url("/addTopic/{categoryId}"), [ForumController::class, 'addTopic'])->name("forum_addTopic");
     Route::post($url->url("/addTopicSaved"), [ForumController::class, 'addTopicSaved'])->name("forum_addTopicSaved");
     Route::post($url->url("/addPost"), [ForumController::class, 'addPost'])->name("forum_addPost");
-
+    Route::post($url->url("/editMessage"), [ForumController::class, 'editMessage'])->name("forum_editMessage");
 });
