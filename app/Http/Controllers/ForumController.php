@@ -191,6 +191,6 @@ class ForumController extends Controller
         {
             return new JsonResponse(["success" => false],500);
         }
-        return new JsonResponse(["success" => true]);
+        return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
     }
 }

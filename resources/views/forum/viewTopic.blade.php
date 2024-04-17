@@ -8,7 +8,7 @@
                     <th>Message</th>
                 </tr>
             @foreach ($posts as $post)
-                <tr>
+                <tr @if($loop->last) id="lastPost" @endif>
                     @if ($posts->currentPage() === $posts->lastPage() && $loop->last && $post->user->id === Auth::user()->id)
                     <td><a href = "javascript:editLastMessageModal()">{{ $post->user->name }}</a></td>
                     <td><a href = "javascript:editLastMessageModal()">{{ $post->message }}</a></td>
@@ -37,12 +37,17 @@
                 <button type="submit" id="editMessageFormButton" style="display:none"></button>
             </form>
         </div>
+    @if (request()->get('addedPost'))
+    <script>
+        $('html, body').scrollTop($("#lastPost").offset().top);
+    </script>
+    @endif
     <script>
         $( "#addPostForm" ).on( "submit", function( event ) {
             event.preventDefault();
             $.post( "{{ route('forum_addPost') }}", $(this).serializeArray())
                 .done(function( data ) {
-                    window.location = data.url;
+                    window.location = data.url + "&addedPost=1"
                 });
         });
     </script>
@@ -71,7 +76,7 @@
                         if (message) {
                             $.post("{{ route('forum_editMessage') }}", {message: message})
                                 .done(function (data) {
-                                    window.location = "";
+                                    window.location = data.url + "&addedPost=1"
                                 });
                             return true;
                         }
