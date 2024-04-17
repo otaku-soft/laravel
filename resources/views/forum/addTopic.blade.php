@@ -18,7 +18,7 @@ $( "#addTopicForm" ).on( "submit", function( event ) {
     event.preventDefault();
     $.post( "{{ route('forum_addTopicSaved') }}", $(this).serializeArray())
         .done(function( data ) {
-            window.location = "{{ route('forum_topicList',['category_id' => $category->id]) }}";
+            window.location = data.url;
         });
 });
 </script>

@@ -145,7 +145,7 @@ class ForumController extends Controller
         {
             return new Response(["success" => false],500);
         }
-        return new JsonResponse(["success" => true]);
+        return $this->redirectSuccessPostResponse($entity_topic);;
     }
     public function viewTopic($topic_id,Request $request) : view
     {
@@ -170,8 +170,7 @@ class ForumController extends Controller
         {
             return new Response(["success" => false],500);
         }
-        //($topic->posts()->
-        return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
+        return $this->redirectSuccessPostResponse($topic);
     }
     public function editMessage(Request $request) : JsonResponse
     {
@@ -191,6 +190,10 @@ class ForumController extends Controller
         {
             return new JsonResponse(["success" => false],500);
         }
+        return $this->redirectSuccessPostResponse($topic);
+    }
+    private function redirectSuccessPostResponse(forums_topics $topic) : JsonResponse
+    {
         return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
     }
 }
