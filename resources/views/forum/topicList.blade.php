@@ -30,7 +30,8 @@
             <button class="btn btn-primary" onclick = "window.location='{{ route('forum_addTopic',['categoryId' => $category->id]) }}'">
               Add Topic
             </button>
-
+            @else
+                You must  <a href = "{{route('login') }}" class="link-secondary">log in</a> to post new topic
             @endauth
     <br/><br/>
 

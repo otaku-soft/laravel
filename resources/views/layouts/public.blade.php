@@ -152,15 +152,16 @@
                 <a class="nav-link" href="{{ url('/') }}">Home</a>
                 <a class="nav-link" href="{{ url('/forum') }}">Forum</a>
                 @auth
-                    <form method="POST" action="{{ route('logout') }}" >
-                        @csrf
-                        <a :href="route('logout')" style="cursor:pointer;padding-left:10px"
-                           class="nav-link"
-                           onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </a>
-                    </form>
+                <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
+                <form method="POST" action="{{ route('logout') }}" >
+                    @csrf
+                    <a :href="route('logout')" style="cursor:pointer;padding-left:10px"
+                       class="nav-link"
+                       onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                        {{ __('Log Out') }}
+                    </a>
+                </form>
                 @else
                     <a class="nav-link" href="{{ route('login') }}">Log in</a>
                     <a href="{{ route('register') }}" class="nav-link">Register</a>

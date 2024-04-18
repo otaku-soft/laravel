@@ -9,7 +9,7 @@
                 </tr>
             @foreach ($posts as $post)
                 <tr @if($loop->last) id="lastPost" @endif>
-                    @if ($posts->currentPage() === $posts->lastPage() && $loop->last && $post->user->id === Auth::user()->id)
+                    @if ($posts->currentPage() === $posts->lastPage() && $loop->last && $post->user->id === Auth::id())
                     <td><a href = "javascript:editLastMessageModal()">{{ $post->user->name }}</a></td>
                     <td><a href = "javascript:editLastMessageModal()">{{ $post->message }}</a></td>
                     @else
@@ -29,6 +29,9 @@
                     Add Reply
                 </button>
             </form>
+        @else
+            <br/>
+            You must  <a href = "{{route('login') }}" class="link-secondary">log in</a> to post reply
         @endauth
         {{ $posts->links() }}
         <div style="display:none" id ="editMessage">
