@@ -10,6 +10,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('forumCreator_index')" :active="request()->routeIs('forumCreator_index')">
+                        Forum Creator
+                    </x-nav-link>
             </div>
 
             <!-- Settings Dropdown -->
