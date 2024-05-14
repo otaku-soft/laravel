@@ -23,7 +23,7 @@
                                     Delete
                                 </x-normal-link>
                                 |
-                                <x-normal-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                <x-normal-link :href="route('forumCreator_categoryIndex',['section_id' => $section->id])">
                                     Manage Categories
                                 </x-normal-link>
                             </li>

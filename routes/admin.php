@@ -11,5 +11,12 @@ Route::middleware('auth')->group(function () {
     Route::post($url->url("/editSection"), [ForumCreatorController::class, 'editSection'])->name("forumCreator_editSection");
     Route::post($url->url("/deleteSectionModal"), [ForumCreatorController::class, 'deleteSectionModal'])->name("forumCreator_deleteSectionModal");
     Route::post($url->url("/deleteSection"), [ForumCreatorController::class, 'deleteSection'])->name("forumCreator_deleteSection");
-
+    $urlCategory = new UrlBuilder("/admin/forumCreator/category/");
+    Route::get($urlCategory->url("{section_id}"), [ForumCreatorController::class, 'categoryIndex'])->name("forumCreator_categoryIndex");
+    Route::post($urlCategory->url("orderCategories"), [ForumCreatorController::class, 'orderCategories'])->name("forumCreator_orderCategories");
+    Route::post($urlCategory->url("addCategory"), [ForumCreatorController::class, 'addCategory'])->name("forumCreator_addCategory");
+    Route::post($urlCategory->url("/editCategoryModal"), [ForumCreatorController::class, 'editCategoryModal'])->name("forumCreator_editCategoryModal");
+    Route::post($urlCategory->url("/editCategory"), [ForumCreatorController::class, 'editCategory'])->name("forumCreator_editCategory");
+    Route::post($urlCategory->url("/deleteCategoryModal"), [ForumCreatorController::class, 'deleteCategoryModal'])->name("forumCreator_deleteCategoryModal");
+    Route::post($urlCategory->url("/deleteCategory"), [ForumCreatorController::class, 'deleteCategory'])->name("forumCreator_deleteCategory");
 });
