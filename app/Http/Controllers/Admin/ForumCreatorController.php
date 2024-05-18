@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\forums_sections;
 use App\Models\forums_categories;
+use App\Models\Permission;
+
 class ForumCreatorController extends Controller
 {
     public function index(): View
@@ -39,6 +41,10 @@ class ForumCreatorController extends Controller
         if ($lastSection)
             $section->order = $lastSection->order + 1;
         $section->save();
+        $permission = new Permission();
+        $permission->name = 'section_'.$section->id;
+        $permission->guard_name = 'web';
+        $permission->save();
         return new JsonResponse(["success" => true]);
     }
 
@@ -109,6 +115,10 @@ class ForumCreatorController extends Controller
                 $category->order = $lastCategory->order + 1;
             }
             $category->save();
+            $permission = new Permission();
+            $permission->name = 'category_'.$category->id;
+            $permission->guard_name = 'web';
+            $permission->save();
         }
         return new JsonResponse(["success" => true]);
     }

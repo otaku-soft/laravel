@@ -9,7 +9,6 @@ use App\Models\forums_sections;
 use App\Models\forums_categories;
 use App\Models\forums_topics;
 use App\Models\forums_posts;
-use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,8 +17,6 @@ class ForumController extends Controller
     public function index(): View
     {
         $sections = forums_sections::all();
-        $user = User::find(1);
-        $user->assignRole(['admin','user']);
         return view('forum.index',["sections" => $sections]);
     }
     public function createForumSections(): Response

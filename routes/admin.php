@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ForumCreatorController;
+use App\Http\Controllers\Admin\RolesController;
 use App\Routes\UrlBuilder;
 Route::middleware('auth')->group(function () {
     $url = new UrlBuilder("/admin/forumCreator");
@@ -19,4 +20,11 @@ Route::middleware('auth')->group(function () {
     Route::post($urlCategory->url("/editCategory"), [ForumCreatorController::class, 'editCategory'])->name("forumCreator_editCategory");
     Route::post($urlCategory->url("/deleteCategoryModal"), [ForumCreatorController::class, 'deleteCategoryModal'])->name("forumCreator_deleteCategoryModal");
     Route::post($urlCategory->url("/deleteCategory"), [ForumCreatorController::class, 'deleteCategory'])->name("forumCreator_deleteCategory");
+    $urlRoles = new UrlBuilder("/admin/Roles/");
+    Route::get($urlRoles->url(""), [RolesController::class, 'index'])->name("roles_index");
+    Route::post($urlRoles->url("/addRole"), [RolesController::class, 'addRole'])->name("roles_addRole");
+    Route::post($urlRoles->url("/editRoleModal"), [RolesController::class, 'editRoleModal'])->name("roles_editRoleModal");
+    Route::post($urlRoles->url("/editRole"), [RolesController::class, 'editRole'])->name("roles_editRole");
+    Route::post($urlRoles->url("/setForumPermissions"), [RolesController::class, 'setForumPermissions'])->name("roles_setForumPermissions");
+    Route::post($urlRoles->url("/setForumPermissionsSave"), [RolesController::class, 'setForumPermissionsSave'])->name("roles_setForumPermissionsSave");
 });
