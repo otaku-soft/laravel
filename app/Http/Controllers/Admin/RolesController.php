@@ -61,11 +61,12 @@ class RolesController extends Controller
                 $new_permissions[] = $permission->name;
             }
         }
-
+        if (is_array($section_ids))
         foreach ($section_ids as $section_id)
         {
             $new_permissions[] = "section_".$section_id;
         }
+        if (is_array($category_ids))
         foreach ($category_ids as $category_id)
         {
             $new_permissions[] = "category_".$category_id;
