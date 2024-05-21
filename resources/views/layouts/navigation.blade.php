@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('roles_index')" :active="request()->routeIs('roles_index')">
                         Roles
                     </x-nav-link>
+                    <x-nav-link :href="route('users_index')" :active="request()->routeIs('users_index')">
+                        Users
+                    </x-nav-link>
             </div>
 
             <!-- Settings Dropdown -->

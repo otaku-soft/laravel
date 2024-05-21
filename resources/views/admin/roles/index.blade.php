@@ -13,10 +13,10 @@
                         @foreach ($roles as $role)
                             <li class="p-4 border">
                                 {{ $role->name }}
-                                @if ($role->name !== "admin")
                                 <x-primary-button style="float:right;" onclick="setForumPermissionsModal({{ $role->id }})">
                                     Set Forum Permissions
                                 </x-primary-button>
+                                @if ($role->name !== "admin")
                                 <x-primary-button style="float:right;margin-right:5px" onclick="editRoleModal({{ $role->id }})">
                                     Edit
                                 </x-primary-button>

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-
+use Illuminate\Http\Request;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -18,9 +18,11 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(Request $request): void
     {
-        Paginator::useBootstrapFive();
-        //
+        if (str_contains($request->url(),"/admin/"))
+            Paginator::useTailwind();
+        else
+            Paginator::useBootstrapFive();
     }
 }
