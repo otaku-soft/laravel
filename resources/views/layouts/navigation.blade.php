@@ -7,9 +7,16 @@
 
 
                 <!-- Navigation Links -->
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
+                        Home
+                    </x-nav-link>
+                    <x-nav-link :href="route('forum_index')" :active="request()->routeIs('forum_index')">
+                        Forum
+                    </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (Session::get("role")->name === "admin")
                     <x-nav-link :href="route('forumCreator_index')" :active="request()->routeIs('forumCreator_index')">
                         Forum Creator
                     </x-nav-link>
@@ -19,6 +26,7 @@
                     <x-nav-link :href="route('users_index')" :active="request()->routeIs('users_index')">
                         Users
                     </x-nav-link>
+                    @endif
             </div>
 
             <!-- Settings Dropdown -->

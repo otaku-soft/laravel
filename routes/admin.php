@@ -1,10 +1,14 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ForumCreatorController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Middleware\AuthAdmin;
 use App\Routes\UrlBuilder;
-Route::middleware('auth')->group(function () {
+
+Route::middleware(AuthAdmin::class)->group(function ()
+{
     $url = new UrlBuilder("/admin/forumCreator");
     Route::get($url->url(""), [ForumCreatorController::class, 'index'])->name("forumCreator_index");
     Route::post($url->url("/addSection"), [ForumCreatorController::class, 'addSection'])->name("forumCreator_addSection");
