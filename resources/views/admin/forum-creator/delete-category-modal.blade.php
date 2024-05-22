@@ -7,9 +7,9 @@
 <script>
     function deleteCategory()
     {
-        $.post( "{{ route('forumCreator_deleteCategory') }}", {id:  {{$category->id }}})
-            .done(function( data ) {
-                window.location = "";
-            });
+        $.post("{{ route('forumCreator_deleteCategory') }}", {id: {{$category->id }}}).done(function (data)
+        {
+            window.location = "";
+        });
     }
 </script>

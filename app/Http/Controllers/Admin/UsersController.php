@@ -11,18 +11,31 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
+    /**
+     * @return View
+     */
     public function index(): View
     {
         $users = User::paginate(10);
-        return view('admin.users.index',["users" => $users]);
+        return view('admin.users.index', ["users" => $users]);
     }
+
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function editModal(Request $request): View
     {
         $user = User::find($request->get("id"));
         $roles = Role::all();
-        return view('admin.users.edit-user-modal',["user" => $user,"roles" => $roles]);
+        return view('admin.users.edit-user-modal', ["user" => $user, "roles" => $roles]);
     }
-    public function edit(Request $request) : JsonResponse
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function edit(Request $request): JsonResponse
     {
         $user = User::find($request->get("id"));
         $user->name = $request->get("name");

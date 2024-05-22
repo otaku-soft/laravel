@@ -11,8 +11,12 @@ class forums_categories extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    /**
+     * @return HasMany
+     */
     public function topics(): HasMany
     {
-        return $this->hasMany(forums_topics::class,"category_id");
+        return $this->hasMany(forums_topics::class, "category_id");
     }
 }

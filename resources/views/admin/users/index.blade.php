@@ -11,8 +11,8 @@
                     <h2 class="pb-3">User List</h2>
 
 
-                    <div class="relative overflow-x-auto"  >
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" >
+                    <div class="relative overflow-x-auto">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-white">
                             <tr>
                                 <td>
@@ -27,19 +27,20 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
-                                    <tr>
-                                        <td>
-                                            {{ $user->name }}
-                                        </td>
-                                        <td>
-                                            {{ $user->email }}
-                                        </td>
-                                        <td>
-                                            <a href ="javascript:editUserModal({{ $user->id }})" class="link-secondary" >Edit</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($users as $user)
+                                <tr>
+                                    <td>
+                                        {{ $user->name }}
+                                    </td>
+                                    <td>
+                                        {{ $user->email }}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:editUserModal({{ $user->id }})"
+                                           class="link-secondary">Edit</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -49,22 +50,22 @@
         </div>
     </div>
     <x-modal name="edit-user">
-        <div class ="p-6" id="edit-user-contents">
+        <div class="p-6" id="edit-user-contents">
         </div>
     </x-modal>
 </x-app-layout>
 <script>
-function editUserModal(id)
-{
-    $.post( "{{ route('users_editModal') }}",{id: id})
-        .done(function( data ) {
+    function editUserModal(id)
+    {
+        $.post("{{ route('users_editModal') }}", {id: id}).done(function (data)
+        {
             $("#edit-user-contents").html(data);
             window.dispatchEvent(new CustomEvent('open-modal', {detail: 'edit-user', 'bubbles': true}));
         });
-}
+    }
 </script>
 <style>
     td {
-        line-height:2em;
+        line-height: 2em;
     }
 </style>

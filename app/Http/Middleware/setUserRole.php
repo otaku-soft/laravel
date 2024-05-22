@@ -13,16 +13,19 @@ class setUserRole
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         $role_name = "guest";
-        if (Auth::user() && Auth::user()->roles())
+
+        if (Auth::user())
         {
+            $role_name = "user";
+            if (Auth::user()->roles() && Auth::user()->roles()->first())
             $role_name = Auth::user()->roles()->first()->name;
         }
-        $request->session()->put("role",Role::where("name",$role_name)->first());
+        $request->session()->put("role", Role::where("name", $role_name)->first());
         return $next($request);
     }
 }

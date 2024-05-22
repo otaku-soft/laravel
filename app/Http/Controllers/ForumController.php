@@ -11,8 +11,8 @@ use App\Models\forums_topics;
 use App\Models\forums_posts;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Role;
 use Illuminate\Support\Facades\Session;
+
 class ForumController extends Controller
 {
     public function index(Request $request): View
@@ -83,13 +83,15 @@ class ForumController extends Controller
                         ]
                 ]
             ];
-        foreach ($sections as $section) {
+        foreach ($sections as $section)
+        {
             $entity_section = new forums_sections();
             $entity_section->name = $section['name'];
             $entity_section->description = $section['description'];
             $entity_section->order = $section['order'];
             $entity_section->save();
-            foreach ($section['categories'] as $category) {
+            foreach ($section['categories'] as $category)
+            {
                 $entity_category = new forums_categories();
                 $entity_category->section_id = $entity_section->id;
                 $entity_category->name = $category['name'];
@@ -97,7 +99,8 @@ class ForumController extends Controller
                 $entity_category->order = $category['order'];
                 $entity_category->save();
                 if (isset($category['topics']))
-                    foreach ($category['topics'] as $topic) {
+                    foreach ($category['topics'] as $topic)
+                    {
                         $entity_topic = new forums_topics();
                         $entity_topic->category_id = $entity_category->id;
                         $entity_topic->user_id = $topic['user_id'];
@@ -116,25 +119,28 @@ class ForumController extends Controller
 
     function checkForCategoryAccess($category_id)
     {
-       if (!$category_id || !Session::get("role")->hasPermissionTo("category_".$category_id))
+        if (!$category_id || !Session::get("role")->hasPermissionTo("category_" . $category_id))
         {
             abort(401);
         }
     }
-    public function topicList(int $category_id) : View
+
+    public function topicList(int $category_id): View
     {
         $this->checkForCategoryAccess($category_id);
         $category = forums_categories::find($category_id);
         $topics = $category->topics()->latest()->paginate(10);
-        return view('forum.topicList',["category" => $category,'topics' => $topics]);
+        return view('forum.topicList', ["category" => $category, 'topics' => $topics]);
     }
-    public function addTopic(int $categoryId, Request $request) : View
+
+    public function addTopic(int $categoryId, Request $request): View
     {
         $this->checkForCategoryAccess($categoryId);
         $category = forums_categories::find($categoryId);
-        $request->session()->put("addTopicCategoryId",$categoryId);
-        return view('forum.addTopic',["category" => $category]);
+        $request->session()->put("addTopicCategoryId", $categoryId);
+        return view('forum.addTopic', ["category" => $category]);
     }
+
     public function addTopicSaved(Request $request)
     {
         try
@@ -153,18 +159,20 @@ class ForumController extends Controller
         }
         catch (\Exception $e)
         {
-            return new Response(["success" => false],500);
+            return new Response(["success" => false], 500);
         }
         return $this->redirectSuccessPostResponse($entity_topic);
     }
-    public function viewTopic($topic_id,Request $request) : view
+
+    public function viewTopic($topic_id, Request $request): view
     {
         $topic = forums_topics::find($topic_id);
         $this->checkForCategoryAccess($topic->category_id);
         $posts = $topic->posts()->paginate(10);
-        $request->session()->put("addTopicId",$topic->id);
-        return view("forum.viewTopic",["topic" => $topic,"posts" => $posts]);
+        $request->session()->put("addTopicId", $topic->id);
+        return view("forum.viewTopic", ["topic" => $topic, "posts" => $posts]);
     }
+
     public function addPost(Request $request)
     {
         try
@@ -179,17 +187,18 @@ class ForumController extends Controller
         }
         catch (\Exception $e)
         {
-            return new Response(["success" => false],500);
+            return new Response(["success" => false], 500);
         }
         return $this->redirectSuccessPostResponse($topic);
     }
+
     public function editMessage(Request $request)
     {
         try
         {
             $topic = forums_topics::find($request->session()->get("addTopicId"));
             $this->checkForCategoryAccess($topic->category_id);
-            $lastPost = $topic->posts()->orderBy("id","desc")->first();
+            $lastPost = $topic->posts()->orderBy("id", "desc")->first();
             if ($lastPost->user->id !== Auth::id())
             {
                 return new JsonResponse(["success" => false, 401]);
@@ -199,12 +208,13 @@ class ForumController extends Controller
         }
         catch (\Exception $e)
         {
-            return new JsonResponse(["success" => false],500);
+            return new JsonResponse(["success" => false], 500);
         }
         return $this->redirectSuccessPostResponse($topic);
     }
-    private function redirectSuccessPostResponse(forums_topics $topic) : JsonResponse
+
+    private function redirectSuccessPostResponse(forums_topics $topic): JsonResponse
     {
-        return new JsonResponse(["success" => true,"url" => route('forum_viewTopic',['topic_id' => $topic->id,'page' => $topic->posts()->paginate(10)->lastPage()])]);
+        return new JsonResponse(["success" => true, "url" => route('forum_viewTopic', ['topic_id' => $topic->id, 'page' => $topic->posts()->paginate(10)->lastPage()])]);
     }
 }

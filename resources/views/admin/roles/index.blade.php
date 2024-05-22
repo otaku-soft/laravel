@@ -13,18 +13,20 @@
                         @foreach ($roles as $role)
                             <li class="p-4 border">
                                 {{ $role->name }}
-                                <x-primary-button style="float:right;" onclick="setForumPermissionsModal({{ $role->id }})">
+                                <x-primary-button style="float:right;"
+                                                  onclick="setForumPermissionsModal({{ $role->id }})">
                                     Set Forum Permissions
                                 </x-primary-button>
                                 @if ($role->name !== "admin")
-                                <x-primary-button style="float:right;margin-right:5px" onclick="editRoleModal({{ $role->id }})">
-                                    Edit
-                                </x-primary-button>
+                                    <x-primary-button style="float:right;margin-right:5px"
+                                                      onclick="editRoleModal({{ $role->id }})">
+                                        Edit
+                                    </x-primary-button>
                                 @endif
                             </li>
                         @endforeach
                     </ul>
-                    <x-primary-button x-data=""  x-on:click.prevent="$dispatch('open-modal', 'add-role')">
+                    <x-primary-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'add-role')">
                         Add Role
                     </x-primary-button>
                 </div>
@@ -32,16 +34,16 @@
         </div>
     </div>
     <x-modal name="add-role">
-        <div class ="p-6">
+        <div class="p-6">
             <form id="addRoleForm">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Add Role</h2>
                 <x-text-input
-                    id="name"
-                    name="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    placeholder="Name"
-                    required
+                        id="name"
+                        name="name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        placeholder="Name"
+                        required
                 />
                 <br/>
                 <x-primary-button>
@@ -51,37 +53,40 @@
         </div>
     </x-modal>
     <x-modal name="edit-role">
-        <div class ="p-6" id="edit-role-contents">
+        <div class="p-6" id="edit-role-contents">
         </div>
     </x-modal>
     <x-modal name="set-forum-permissions">
-        <div class ="p-6" id="set-forum-permissions-contents">
+        <div class="p-6" id="set-forum-permissions-contents">
         </div>
     </x-modal>
 </x-app-layout>
 
 <script>
-    $( "#addRoleForm" ).on( "submit", function( event ) {
+    $("#addRoleForm").on("submit", function (event)
+    {
         event.preventDefault();
-        $.post( "{{ route('roles_addRole') }}", $(this).serializeArray())
-            .done(function( data ) {
-                window.location = "";
-            });
+        $.post("{{ route('roles_addRole') }}", $(this).serializeArray()).done(function (data)
+        {
+            window.location = "";
+        });
     });
+
     function editRoleModal(id)
     {
-        $.post( "{{ route('roles_editRoleModal') }}",{id: id})
-            .done(function( data ) {
-                $("#edit-role-contents").html(data);
-                window.dispatchEvent(new CustomEvent('open-modal', {detail: 'edit-role', 'bubbles': true}));
-            });
+        $.post("{{ route('roles_editRoleModal') }}", {id: id}).done(function (data)
+        {
+            $("#edit-role-contents").html(data);
+            window.dispatchEvent(new CustomEvent('open-modal', {detail: 'edit-role', 'bubbles': true}));
+        });
     }
+
     function setForumPermissionsModal(id)
     {
-        $.post( "{{ route('roles_setForumPermissions') }}",{id: id})
-            .done(function( data ) {
-                $("#set-forum-permissions-contents").html(data);
-                window.dispatchEvent(new CustomEvent('open-modal', {detail: 'set-forum-permissions', 'bubbles': true}));
-            });
+        $.post("{{ route('roles_setForumPermissions') }}", {id: id}).done(function (data)
+        {
+            $("#set-forum-permissions-contents").html(data);
+            window.dispatchEvent(new CustomEvent('open-modal', {detail: 'set-forum-permissions', 'bubbles': true}));
+        });
     }
 </script>

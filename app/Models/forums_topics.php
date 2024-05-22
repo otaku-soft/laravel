@@ -12,12 +12,20 @@ class forums_topics extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    public function user() : HasOne
+
+    /**
+     * @return HasOne
+     */
+    public function user(): HasOne
     {
-        return $this->hasOne(User::class,"id","user_id");
+        return $this->hasOne(User::class, "id", "user_id");
     }
+
+    /**
+     * @return HasMany
+     */
     public function posts(): HasMany
     {
-        return $this->hasMany(forums_posts::class,"topic_id");
+        return $this->hasMany(forums_posts::class, "topic_id");
     }
 }

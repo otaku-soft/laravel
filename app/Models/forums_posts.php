@@ -6,12 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class forums_posts extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    public function user() : HasOne
+
+    /**
+     * @return HasOne
+     */
+    public function user(): HasOne
     {
-        return $this->hasOne(User::class,"id","user_id");
+        return $this->hasOne(User::class, "id", "user_id");
     }
 }

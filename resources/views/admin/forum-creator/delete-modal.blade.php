@@ -5,11 +5,11 @@
     Confirm
 </x-primary-button>
 <script>
-function deleteSection()
-{
-    $.post( "{{ route('forumCreator_deleteSection') }}", {id:  {{$section->id }}})
-        .done(function( data ) {
+    function deleteSection()
+    {
+        $.post("{{ route('forumCreator_deleteSection') }}", {id: {{$section->id }}}).done(function (data)
+        {
             window.location = "";
         });
-}
+    }
 </script>

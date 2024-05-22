@@ -11,6 +11,10 @@ class forums_sections extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    /**
+     * @return HasMany
+     */
     public function categories(): HasMany
     {
         return $this->hasMany(forums_categories::class,"section_id");
