@@ -13,7 +13,7 @@
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
+        <div class="mt-4 text-white">
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input id="password" class="block mt-1 w-full"
@@ -22,6 +22,7 @@
                             required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            {{ $loginError }}
         </div>
 
         <!-- Remember Me -->

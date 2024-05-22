@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session;
 
 class LoginRequest extends FormRequest
 {
@@ -43,6 +44,7 @@ class LoginRequest extends FormRequest
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+            Session::put("loginError","Invalid Credentials");
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
