@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class forums_posts extends Model
+class ForumsPosts extends Model
 {
     use HasFactory;
     use SoftDeletes;

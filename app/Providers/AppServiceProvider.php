@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Models\forums_categories;
+use App\Models\ForumsCategories;
 use App\Observers\ForumsCategoriesObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
-use App\Models\forums_sections;
+use App\Models\ForumsSections;
 use App\Observers\ForumsSectionsObserver;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         else
             Paginator::useBootstrapFive();
 
-        forums_sections::observe(ForumsSectionsObserver::class);
-        forums_categories::observe(ForumsCategoriesObserver::class);
+        ForumsSections::observe(ForumsSectionsObserver::class);
+        ForumsCategories::observe(ForumsCategoriesObserver::class);
     }
 }

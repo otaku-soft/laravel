@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\forums_sections;
-use App\Models\forums_categories;
+use App\Models\ForumsSections;
+use App\Models\ForumsCategories;
 use App\Models\Permission;
 
 class ForumCreatorController extends Controller
@@ -17,7 +17,7 @@ class ForumCreatorController extends Controller
      */
     public function index(): View
     {
-        $sections = forums_sections::all()->sortBy("order");
+        $sections = ForumsSections::all()->sortBy("order");
         return view('admin.forum-creator.index', ["sections" => $sections]);
     }
 
@@ -31,7 +31,7 @@ class ForumCreatorController extends Controller
         $i = 0;
         foreach ($ids as $id)
         {
-            $section = forums_sections::find($id);
+            $section = ForumsSections::find($id);
             $section->order = $i;
             $section->save();
             $i++;
@@ -45,8 +45,8 @@ class ForumCreatorController extends Controller
      */
     public function addSection(Request $request): JsonResponse
     {
-        $lastSection = forums_sections::orderBy("order", "desc")->first();
-        $section = new forums_sections();
+        $lastSection = ForumsSections::orderBy("order", "desc")->first();
+        $section = new ForumsSections();
         $section->name = $request->get("name");
         $section->description = $request->get("description");
         $section->order = 0;
@@ -62,7 +62,7 @@ class ForumCreatorController extends Controller
      */
     public function editModal(Request $request): View
     {
-        $section = forums_sections::find($request->get("id"));
+        $section = ForumsSections::find($request->get("id"));
         return view('admin.forum-creator.edit-modal', ["section" => $section]);
     }
 
@@ -72,7 +72,7 @@ class ForumCreatorController extends Controller
      */
     public function editSection(Request $request): JsonResponse
     {
-        $section = forums_sections::find($request->get("id"));
+        $section = ForumsSections::find($request->get("id"));
         $section->name = $request->get("name");
         $section->description = $request->get("description");
         $section->save();
@@ -85,7 +85,7 @@ class ForumCreatorController extends Controller
      */
     public function deleteSectionModal(Request $request): View
     {
-        $section = forums_sections::find($request->get("id"));
+        $section = ForumsSections::find($request->get("id"));
         return view('admin.forum-creator.delete-modal', ["section" => $section]);
     }
 
@@ -95,7 +95,7 @@ class ForumCreatorController extends Controller
      */
     public function deleteSection(Request $request): JsonResponse
     {
-        $section = forums_sections::find($request->get("id"));
+        $section = ForumsSections::find($request->get("id"));
         if ($section)
         {
             $section->delete();
@@ -110,7 +110,7 @@ class ForumCreatorController extends Controller
      */
     public function categoryIndex($section_id): View
     {
-        $section = forums_sections::find($section_id);
+        $section = ForumsSections::find($section_id);
         return view('admin.forum-creator.category-index', ["section" => $section]);
     }
 
@@ -120,12 +120,12 @@ class ForumCreatorController extends Controller
      */
     public function orderCategories(Request $request): JsonResponse
     {
-        $sectionParent = forums_sections::find($request->get("section_id"));
+        $sectionParent = ForumsSections::find($request->get("section_id"));
         $ids = $request->get("ids");
         $i = 0;
         foreach ($ids as $id)
         {
-            $category = forums_categories::find($id);
+            $category = ForumsCategories::find($id);
             if ($sectionParent->id === $category->section_id)
             {
                 $category->order = $i;
@@ -142,11 +142,11 @@ class ForumCreatorController extends Controller
      */
     public function addCategory(Request $request): JsonResponse
     {
-        $section = forums_sections::find($request->get("section_id"));
+        $section = ForumsSections::find($request->get("section_id"));
         $lastCategory = $section->categories()->orderBy("order", "desc")->first();
         if ($section)
         {
-            $category = new forums_categories();
+            $category = new ForumsCategories();
             $category->section_id = $section->id;
             $category->name = $request->get("name");
             $category->description = $request->get("description");
@@ -166,7 +166,7 @@ class ForumCreatorController extends Controller
      */
     public function editCategoryModal(Request $request): View
     {
-        $category = forums_categories::find($request->get("id"));
+        $category = ForumsCategories::find($request->get("id"));
         return view('admin.forum-creator.edit-category-modal', ["category" => $category]);
     }
 
@@ -176,7 +176,7 @@ class ForumCreatorController extends Controller
      */
     public function editCategory(Request $request): JsonResponse
     {
-        $section = forums_categories::find($request->get("id"));
+        $section = ForumsCategories::find($request->get("id"));
         $section->name = $request->get("name");
         $section->description = $request->get("description");
         $section->save();
@@ -189,7 +189,7 @@ class ForumCreatorController extends Controller
      */
     public function deleteCategoryModal(Request $request): View
     {
-        $category = forums_categories::find($request->get("id"));
+        $category = ForumsCategories::find($request->get("id"));
         return view('admin.forum-creator.delete-category-modal', ["category" => $category]);
     }
 
@@ -199,7 +199,7 @@ class ForumCreatorController extends Controller
      */
     public function deleteCategory(Request $request): JsonResponse
     {
-        $category = forums_categories::find($request->get("id"));
+        $category = ForumsCategories::find($request->get("id"));
         if ($category)
         {
             $category->delete();

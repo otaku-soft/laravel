@@ -2,50 +2,50 @@
 
 namespace App\Observers;
 
-use App\Models\forums_categories;
+use App\Models\ForumsCategories;
 use App\Models\Permission;
 
 class ForumsCategoriesObserver
 {
     /**
-     * Handle the forums_categories "created" event.
+     * Handle the ForumsCategories "created" event.
      */
-    public function created(forums_categories $forums_categories): void
+    public function created(ForumsCategories $ForumsCategories): void
     {
         $permission = new Permission();
-        $permission->name = "category_{$forums_categories->id}";
+        $permission->name = "category_{$ForumsCategories->id}";
         $permission->guard_name = 'web';
         $permission->save();
     }
 
     /**
-     * Handle the forums_categories "updated" event.
+     * Handle the ForumsCategories "updated" event.
      */
-    public function updated(forums_categories $forums_categories): void
+    public function updated(ForumsCategories $ForumsCategories): void
     {
         //
     }
 
     /**
-     * Handle the forums_categories "deleted" event.
+     * Handle the ForumsCategories "deleted" event.
      */
-    public function deleted(forums_categories $forums_categories): void
+    public function deleted(ForumsCategories $ForumsCategories): void
     {
         //
     }
 
     /**
-     * Handle the forums_categories "restored" event.
+     * Handle the ForumsCategories "restored" event.
      */
-    public function restored(forums_categories $forums_categories): void
+    public function restored(ForumsCategories $ForumsCategories): void
     {
         //
     }
 
     /**
-     * Handle the forums_categories "force deleted" event.
+     * Handle the ForumsCategories "force deleted" event.
      */
-    public function forceDeleted(forums_categories $forums_categories): void
+    public function forceDeleted(ForumsCategories $ForumsCategories): void
     {
         //
     }

@@ -2,50 +2,50 @@
 
 namespace App\Observers;
 
-use App\Models\forums_sections;
+use App\Models\ForumsSections;
 use App\Models\Permission;
 
 class ForumsSectionsObserver
 {
     /**
-     * Handle the forums_sections "created" event.
+     * Handle the ForumsSections "created" event.
      */
-    public function created(forums_sections $forums_sections): void
+    public function created(ForumsSections $ForumsSections): void
     {
         $permission = new Permission();
-        $permission->name = "section_{$forums_sections->id}";
+        $permission->name = "section_{$ForumsSections->id}";
         $permission->guard_name = 'web';
         $permission->save();
     }
 
     /**
-     * Handle the forums_sections "updated" event.
+     * Handle the ForumsSections "updated" event.
      */
-    public function updated(forums_sections $forums_sections): void
+    public function updated(ForumsSections $ForumsSections): void
     {
         //
     }
 
     /**
-     * Handle the forums_sections "deleted" event.
+     * Handle the ForumsSections "deleted" event.
      */
-    public function deleted(forums_sections $forums_sections): void
+    public function deleted(ForumsSections $ForumsSections): void
     {
         //
     }
 
     /**
-     * Handle the forums_sections "restored" event.
+     * Handle the ForumsSections "restored" event.
      */
-    public function restored(forums_sections $forums_sections): void
+    public function restored(ForumsSections $ForumsSections): void
     {
         //
     }
 
     /**
-     * Handle the forums_sections "force deleted" event.
+     * Handle the ForumsSections "force deleted" event.
      */
-    public function forceDeleted(forums_sections $forums_sections): void
+    public function forceDeleted(ForumsSections $ForumsSections): void
     {
         //
     }

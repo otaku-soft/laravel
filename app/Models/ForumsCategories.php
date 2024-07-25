@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class forums_categories extends Model
+class ForumsCategories extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -17,6 +17,6 @@ class forums_categories extends Model
      */
     public function topics(): HasMany
     {
-        return $this->hasMany(forums_topics::class, "category_id");
+        return $this->hasMany(ForumsTopics::class, "category_id");
     }
 }

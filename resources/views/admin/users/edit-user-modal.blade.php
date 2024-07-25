@@ -43,6 +43,7 @@
         event.preventDefault();
         $.post("{{ route('users_edit') }}", $(this).serializeArray()).done(function (data)
         {
+            window.location = "";
         });
     });
 </script>

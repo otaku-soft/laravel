@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use App\Models\forums_sections;
+use App\Models\ForumsSections;
 use App\Models\Role;
 
 class RolesController extends Controller
@@ -65,7 +65,7 @@ class RolesController extends Controller
     public function setForumPermissions(Request $request) : View
     {
         $role = Role::find($request->get("id"));
-        $sections = forums_sections::all()->sortBy("order");
+        $sections = ForumsSections::all()->sortBy("order");
         return view('admin.roles.set-forum-permissions', ["sections" => $sections, 'role' => $role]);
     }
 
