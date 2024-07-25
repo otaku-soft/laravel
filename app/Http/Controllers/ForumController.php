@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Session;
 
 class ForumController extends Controller
 {
+    const PAGINATE_LIMIT = 10;
+    /**
+     * @param Request $request
+     * @return View
+     */
     public function index(Request $request): View
     {
         $sections = forums_sections::orderBy("order")->get();
@@ -22,23 +27,35 @@ class ForumController extends Controller
     }
 
 
-
+    /**
+     * @param $category_id
+     * @return void
+     */
     function checkForCategoryAccess($category_id)
     {
-        if (!$category_id || !Session::get("role")->hasPermissionTo("category_" . $category_id))
+        if (!$category_id || !Session::get("role")->hasPermissionTo("category_{$category_id}"))
         {
             abort(401);
         }
     }
 
+    /**
+     * @param int $category_id
+     * @return View
+     */
     public function topicList(int $category_id): View
     {
         $this->checkForCategoryAccess($category_id);
         $category = forums_categories::find($category_id);
-        $topics = $category->topics()->latest()->paginate(10);
+        $topics = $category->topics()->latest()->paginate(self::PAGINATE_LIMIT);
         return view('forum.topicList', ["category" => $category, 'topics' => $topics]);
     }
 
+    /**
+     * @param int $categoryId
+     * @param Request $request
+     * @return View
+     */
     public function addTopic(int $categoryId, Request $request): View
     {
         $this->checkForCategoryAccess($categoryId);
@@ -47,6 +64,10 @@ class ForumController extends Controller
         return view('forum.addTopic', ["category" => $category]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
     public function addTopicSaved(Request $request)
     {
         try
@@ -70,15 +91,24 @@ class ForumController extends Controller
         return $this->redirectSuccessPostResponse($entity_topic);
     }
 
+    /**
+     * @param $topic_id
+     * @param Request $request
+     * @return View
+     */
     public function viewTopic($topic_id, Request $request): view
     {
         $topic = forums_topics::find($topic_id);
         $this->checkForCategoryAccess($topic->category_id);
-        $posts = $topic->posts()->paginate(10);
+        $posts = $topic->posts()->paginate(self::PAGINATE_LIMIT);
         $request->session()->put("addTopicId", $topic->id);
         return view("forum.viewTopic", ["topic" => $topic, "posts" => $posts]);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
     public function addPost(Request $request)
     {
         try
@@ -98,6 +128,10 @@ class ForumController extends Controller
         return $this->redirectSuccessPostResponse($topic);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function editMessage(Request $request)
     {
         try
@@ -119,8 +153,12 @@ class ForumController extends Controller
         return $this->redirectSuccessPostResponse($topic);
     }
 
+    /**
+     * @param forums_topics $topic
+     * @return JsonResponse
+     */
     private function redirectSuccessPostResponse(forums_topics $topic): JsonResponse
     {
-        return new JsonResponse(["success" => true, "url" => route('forum_viewTopic', ['topic_id' => $topic->id, 'page' => $topic->posts()->paginate(10)->lastPage()])]);
+        return new JsonResponse(["success" => true, "url" => route('forum_viewTopic', ['topic_id' => $topic->id, 'page' => $topic->posts()->paginate(self::PAGINATE_LIMIT)->lastPage()])]);
     }
 }

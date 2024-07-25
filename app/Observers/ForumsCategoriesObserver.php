@@ -13,7 +13,7 @@ class ForumsCategoriesObserver
     public function created(forums_categories $forums_categories): void
     {
         $permission = new Permission();
-        $permission->name = 'category_' . $forums_categories->id;
+        $permission->name = "category_{$forums_categories->id}";
         $permission->guard_name = 'web';
         $permission->save();
     }
