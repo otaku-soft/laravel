@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 class ForumController extends Controller
 {
     const PAGINATE_LIMIT = 10;
+
     /**
      * @param Request $request
      * @return View
@@ -24,19 +25,6 @@ class ForumController extends Controller
     {
         $sections = ForumsSections::orderBy("order")->get();
         return view('forum.index', ["sections" => $sections]);
-    }
-
-
-    /**
-     * @param $category_id
-     * @return void
-     */
-    function checkForCategoryAccess($category_id)
-    {
-        if (!$category_id || !Session::get("role")->hasPermissionTo("category_{$category_id}"))
-        {
-            abort(401);
-        }
     }
 
     /**
@@ -151,6 +139,18 @@ class ForumController extends Controller
             return new JsonResponse(["success" => false], 500);
         }
         return $this->redirectSuccessPostResponse($topic);
+    }
+
+    /**
+     * @param $category_id
+     * @return void
+     */
+    function checkForCategoryAccess($category_id)
+    {
+        if (!$category_id || !Session::get("role")->hasPermissionTo("category_{$category_id}"))
+        {
+            abort(401);
+        }
     }
 
     /**
