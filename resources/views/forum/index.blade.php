@@ -1,7 +1,7 @@
 @extends('layouts/public')
 @section('content')
-
-    @foreach ($sections as $section)
+    @php($hasCategory = false)
+    @forelse ($sections as $section)
         @if (Session::get("role")->hasPermissionTo("section_".$section->id))
             <h2>{{ $section->name }} </h2>
             <br/>
@@ -17,10 +17,16 @@
                                 {{ $category->description }}
                             </td>
                         </tr>
+                        @php($hasCategory = true)
                     @endif
                 @endforeach
             </table>
             <br/>
         @endif
-    @endforeach
+        @empty
+            <b>No Forums Available</b>
+    @endforelse
+    @if (!$hasCategory && !empty($sections))
+        No Access
+    @endif
 @endsection
